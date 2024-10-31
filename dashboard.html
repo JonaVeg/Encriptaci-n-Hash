@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Bienvenido al Dashboard</h1>
+    <h2>Lista de Usuarios Registrados</h2>
+    <ul id="userList"></ul>
+
+    <!-- Incluye Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-0xCOSEtLmvM1w88JJ4KuVvhTi-tseh4",
+            authDomain: "encriptacionutpuebla.firebaseapp.com",
+            projectId: "encriptacionutpuebla",
+            storageBucket: "encriptacionutpuebla.appspot.com",
+            messagingSenderId: "972000501501",
+            appId: "1:972000501501:web:3806b6090d391015e12894"
+        };
+
+        // Inicializa Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Función para obtener y mostrar la lista de usuarios
+        function displayUsers() {
+            const userList = document.getElementById("userList");
+            db.collection("users").get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const user = doc.data();
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `Correo: ${user.email}, Registrado el: ${user.createdAt.toDate().toLocaleString()}`;
+                        userList.appendChild(listItem);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error al obtener usuarios: ", error);
+                });
+        }
+
+        // Llama a la función para mostrar usuarios al cargar la página
+        window.onload = displayUsers;
+    </script>
+</body>
+</html>
